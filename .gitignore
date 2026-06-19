@@ -1,0 +1,85 @@
+node_modules/
+**/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Build folders
+build/
+dist/
+out/
+.next/
+
+# Coverage
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.env
+frontend/.vite/
+frontend/.parcel-cache/
+frontend/.cache/
+
+
+backend/node_modules/
+backend/dist/
+backend/build/
+backend/.env
+backend/uploads/
+backend/tmp/
+backend/logs/
+
+
+
+# Local MongoDB files (if any)
+*.db
+*.sqlite
+*.sqlite3
+dump/
+
+
+
+jest.config.js.snap
+*.coverage
+
+
+
+*.tsbuildinfo
+
+
+
+docker-compose.override.yml
+
+
+*.pid
+*.seed
+*.pid.lock
