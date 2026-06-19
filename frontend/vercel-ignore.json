@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist",
+  "ignoreCommand": "bash -c 'if [ -z \"$VERCEL\" ]; then echo \"Not Vercel\"; exit 1; else echo \"Vercel detected\"; exit 1; fi'"
+}
