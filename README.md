@@ -4,9 +4,6 @@
 
 A comprehensive emergency response and community care platform designed to connect people in crisis with nearby responders and resources in real-time.
 
-**Hackathon:** Ojass Hackathon - NIT Jamshedpur  
-**Team Name:** Bit Set
-
 ## Features
 
 ### Core Features
@@ -195,15 +192,4 @@ Socket.io is used for:
 
 ---
 
-## Team: Bit Set
-
-Built with love during **Ojass Hackathon** at **NIT Jamshedpur**
-
-**Team Members:**
-- Rishav Kashyap
-- Awaish
-- Aditya
-
----
-
-**Made with love by Team Bit Set**
+**Made with love**
