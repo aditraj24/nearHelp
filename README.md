@@ -21,6 +21,26 @@ A comprehensive emergency response and community care platform designed to conne
 
 ---
 
+## Tech Stack
+
+Both the frontend and the backend are written end-to-end in **TypeScript** with `strict` mode enabled.
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend framework | **Next.js 16** (App Router) + React 19, TypeScript |
+| Styling | Tailwind CSS v4 |
+| Client state | Zustand (persisted to `localStorage`) |
+| Maps | Leaflet + react-leaflet (loaded via `next/dynamic` with `ssr: false`) |
+| Charts | Recharts |
+| HTTP | Axios |
+| Backend | **Node.js + Express 5**, TypeScript |
+| Database | MongoDB + Mongoose (with `2dsphere` geospatial indexes) |
+| Real-time | Socket.io (WebSocket, with long-polling fallback) |
+| Auth | JWT access/refresh tokens in httpOnly cookies, bcrypt password hashing |
+| AI | Google Gemini (`@google/genai`) with deterministic fallbacks |
+| Uploads | Multer + Cloudinary |
+
+---
 
 ## Quick Start
 
@@ -30,7 +50,7 @@ Copy the example env files and fill in your values:
 
 ```bash
 cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+cp frontend/.env.example frontend/.env.local
 ```
 
 ### Installation & Running
@@ -38,12 +58,12 @@ cp frontend/.env.example frontend/.env
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd web-hack
+cd near-help
 
 # Make scripts executable
 chmod +x setup.sh web.sh
 
-# Install all dependencies (backend + frontend)
+# Install dependencies and build both apps
 ./setup.sh
 
 # Start the application (backend + frontend)
@@ -51,9 +71,33 @@ chmod +x setup.sh web.sh
 ```
 
 The application will be available at:
-- **Frontend**: http://localhost:5173
+- **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:5000
 - **Health Check**: http://localhost:5000/health
+
+### Development mode
+
+Run each app in its own terminal for hot reload:
+
+```bash
+cd backend  && npm run dev   # tsx watch — restarts on .ts changes
+cd frontend && npm run dev   # next dev
+```
+
+### Useful scripts
+
+| Command | Location | What it does |
+|---------|----------|--------------|
+| `npm run dev` | backend | Run the API with `tsx watch` (no build step) |
+| `npm run build` | backend | Compile TypeScript to `dist/` |
+| `npm start` | backend | Run the compiled server from `dist/` |
+| `npm run typecheck` | backend | Type-check without emitting |
+| `npm run dev` | frontend | Next.js dev server on port 3000 |
+| `npm run build` | frontend | Production build |
+| `npm start` | frontend | Serve the production build |
+| `npm run typecheck` | frontend | Type-check without emitting |
+| `npm run lint` | frontend | ESLint (`eslint-config-next`) |
+
 ---
 
 ## API Endpoints
@@ -174,21 +218,39 @@ Socket.io is used for:
 
 ## Key Components
 
-### Frontend Pages
+### Frontend routes (Next.js App Router)
 
-- **Dashboard**: Main user interface with map and SOS controls
-- **AdminDashboard**: Analytics and SOS management
-- **SOSBroadcast**: Broadcast SOS alerts to responders
-- **History**: View past SOS incidents
-- **Login/Register**: Authentication pages
-- **ResourceMap**: Interactive resource locator
+All pages are Client Components — the app is realtime and geolocation-driven, so it
+renders on the client and is protected by the `AuthGuard` / `GuestGuard` wrappers.
 
-### Backend Services
+| Route | File | Description |
+|-------|------|-------------|
+| `/` | `src/app/page.tsx` | Redirects to `/dashboard` |
+| `/login` | `src/app/login/page.tsx` | Sign in (guest-only) |
+| `/register` | `src/app/register/page.tsx` | Sign up (guest-only) |
+| `/dashboard` | `src/app/dashboard/page.tsx` | SOS button, nearby incidents, skills, guardians, welfare checks |
+| `/sos/[sosId]` | `src/app/sos/[sosId]/page.tsx` | Live incident map, responder chat, AI assistant |
+| `/history` | `src/app/history/page.tsx` | Past broadcasts and responses |
+| `/admin` | `src/app/admin/page.tsx` | Analytics and moderation (admin-only) |
 
-- **locationService.js**: Geolocation and proximity calculations
-- **dispatchService.js**: SOS dispatch and responder assignment
-- **aiService.js**: Google Generative AI integration for chatbot
-- **cloudinary.js**: Image upload and management
+### Shared frontend modules
+
+- **`src/types/index.ts`**: Domain types mirroring the Mongoose models
+- **`src/services/api.ts`**: Typed Axios client — every endpoint returns `ApiEnvelope<T>`
+- **`src/services/socket.ts`**: Socket.io client and typed emit helpers
+- **`src/components/AuthGuard.tsx`**: Client-side route protection
+- **`src/components/maps/`**: Leaflet maps, all `next/dynamic` + `ssr: false`
+
+### Backend structure
+
+- **`models/`**: Mongoose schemas with typed instance methods and lifecycle hooks
+- **`controllers/`**: HTTP request handling
+- **`services/locationService.ts`**: In-memory live responder positions + Haversine proximity
+- **`services/dispatchService.ts`**: Weighted responder ranking (ETA / skill / trust)
+- **`socket/index.ts`**: Socket.io auth middleware and all realtime event handlers
+- **`utils/aiService.ts`**: Google Gemini integration with deterministic fallbacks
+- **`utils/ApiError.ts` / `ApiResponse.ts`**: Typed response envelopes
+- **`utils/cloudinary.ts`**: Image upload and management
 
 ---
 

@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Outfit:wght@100..900&family=Dancing+Script:wght@400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
+@theme {
+  --color-primary-50: #fee2e2;
+  --color-primary-100: #fecaca;
+  --color-primary-200: #fca5a5;
+  --color-primary-300: #f87171;
+  --color-primary-400: #ef4444;
+  --color-primary-500: #dc2626;
+  --color-primary-600: #b91c1c;
+  --color-primary-700: #991b1b;
+  --color-primary-800: #7f1d1d;
+  --color-primary-900: #450a0a;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900;
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Chakra Petch', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-red-600 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-red-600/20 hover:bg-red-700 hover:shadow-red-600/30 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-700 border border-gray-200 px-6 py-3 rounded-xl font-medium shadow-sm hover:bg-gray-50 hover:border-gray-300 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2;
+  }
+
+  .card-premium {
+    @apply bg-white/90 backdrop-blur-xl border border-white/20 shadow-xl rounded-2xl;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all outline-none text-gray-800 placeholder-gray-400;
+  }
+}
+
+/* Custom Map Markers */
+.sos-pulse-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.sos-pulse-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #dc2626;
+  border: 4px solid white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.sos-pulse-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #dc2626;
+  animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: -1;
+}
+
+@keyframes radar-ping {
+  75%, 100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+.user-map-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.user-map-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 3px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+
+.leaflet-tile-container {
+  will-change: transform;
+}
+.leaflet-tile {
+  will-change: auto;
+  image-rendering: auto;
+}
+.leaflet-container {
+  -webkit-tap-highlight-color: transparent;
+  isolation: isolate;
+  z-index: 0;
+}
+.leaflet-zoom-anim .leaflet-zoom-animated {
+  will-change: transform;
+}
+.leaflet-fade-anim .leaflet-popup {
+  will-change: opacity;
+}
+
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 800 !important;
+}
+.leaflet-pane {
+  z-index: 400 !important;
+}
+.leaflet-tile-pane {
+  z-index: 200 !important;
+}
+.leaflet-overlay-pane {
+  z-index: 400 !important;
+}
+.leaflet-marker-pane {
+  z-index: 600 !important;
+}
+.leaflet-popup-pane {
+  z-index: 700 !important;
+}
+
+/* Two-finger gesture overlay for mobile maps */
+.map-gesture-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  animation: gestureOverlayFadeIn 0.15s ease-out;
+  backdrop-filter: blur(1px);
+}
+.map-gesture-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 18px;
+  border-radius: 20px;
+  letter-spacing: 0.01em;
+  text-align: center;
+  user-select: none;
+}
+@keyframes gestureOverlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
